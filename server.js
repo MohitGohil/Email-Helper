@@ -4,12 +4,12 @@ const { createServer } = require("http");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const { errorHandler } = require("./src/middleware");
-const mainRoute = require("./src/routes");
+const mainRoute = require("./src/routes/mainRoute");
 
 const app = express();
 const server = createServer(app);
 // setting environment variable port
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 8000;
 
 // Logger middleware - server request's logs
 if (process.env.NODE_ENV == "Development") {
@@ -25,7 +25,8 @@ app.use(express.json());
 // setting various HTTP headers (Better Security)
 app.use(helmet());
 // Routes
-app.use("/route", mainRoute);
+app.get("/", (req, res) => res.json({ message: "Hi, Welcome to the mailer service." }));
+app.use("/email", mainRoute);
 
 // Error handler
 app.use(errorHandler);

@@ -8,8 +8,8 @@ class SendBulkMail {
     if (!email || !subject || !content) {
       throw new Error("Email, subject and content are required.");
     }
-    this.emails = Array.isArray(email) ? email : [email];
-    this.cc = cc ? (isArray(cc) ? cc : [cc]) : [];
+    this.emails = Array.isArray(email) ? email : email.split(",");
+    this.cc = cc ? (Array.isArray(cc) ? cc : cc.split(",")) : [];
     this.subject = subject;
     this.content = content;
     this.attachments = attachments || [];
