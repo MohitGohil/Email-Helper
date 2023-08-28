@@ -49,11 +49,37 @@ async function testRoute(req, res) {
 }
 
 async function singleEmailHandler(req, res) {
-  return res.status(200).json({ message: "Hello from getHandler" });
+  const { email, subject, content, cc, attachments } = req.body;
+  if (!email || !subject || !content) {
+    return res.status(400).json({ message: "Email, subject and content are required." });
+  }
+  try {
+    const { messageId, accepted, rejected, response } = await new Mailer(req.body).sendMail();
+    return res.status(200).json({
+      message: "Mail sent successfully",
+      mail: { messageId, accepted, rejected, response },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong." });
+  }
 }
 
 async function multipleEmailHandler(req, res) {
-  return res.status(200).json({ message: "Hello from getHandler" });
+  const { email, subject, content, cc, attachments } = req.body;
+  if (!email || !subject || !content) {
+    return res.status(400).json({ message: "Email, subject and content are required." });
+  }
+  try {
+    const result = await new SendBulkMail(req.body).sendMail();
+    return res.status(200).json({
+      message: "Mail sent successfully",
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong." });
+  }
 }
 
 module.exports = { homeRoute, helpRoute, testRoute, singleEmailHandler, multipleEmailHandler };

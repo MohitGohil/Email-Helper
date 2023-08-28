@@ -24,11 +24,11 @@ class SendBulkMail {
       },
     });
     // Create return object template
-    const result = { success: [], invalidEmail: [] };
+    const result = { success: [], invalidEmail: [], error: [] };
     // For loop for sending same email content to multiple users
     for (let i = 0; i < this.emails.length; i++) {
       const email = this.emails[i];
-      if (this.isValidEmail(email)) {
+      if (this.#isValidEmail(email)) {
         const mailOptions = {
           from: `Test Mail - Nodejs App <${process.env.GMAIL_USERNAME}>`,
           to: email,
@@ -42,6 +42,7 @@ class SendBulkMail {
           result.success.push({ email, messageId: sentEmail.messageId });
         } catch (error) {
           console.error(`Bulk Email Error - ${error}`);
+          result.error.push({ email, errMessage: error.toString() });
         }
       } else {
         result.invalidEmail.push(email);
@@ -50,7 +51,7 @@ class SendBulkMail {
     return result;
   }
   // Email format check
-  isValidEmail(email) {
+  #isValidEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }

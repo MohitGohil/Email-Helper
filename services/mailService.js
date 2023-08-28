@@ -42,7 +42,7 @@ class Mailer {
     const receiversEmail = this.emails;
     for (let i = 0; i < receiversEmail.length; i++) {
       const email = receiversEmail[i];
-      if (!this.isValidEmail(email)) {
+      if (!this.#isValidEmail(email)) {
         receiversEmail.pop(email);
       }
     }
@@ -65,7 +65,7 @@ class Mailer {
     }
   }
   // check email format
-  isValidEmail(email) {
+  #isValidEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
