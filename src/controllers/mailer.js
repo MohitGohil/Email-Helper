@@ -1,5 +1,5 @@
-const Mailer = require("../../services/mailService");
-const SendBulkMail = require("../../services/bulkMailService");
+const Mailer = require("../services/mailService");
+const SendBulkMail = require("../services/bulkMailService");
 
 async function homeRoute(req, res) {
   return res.status(200).json({
