@@ -1,26 +1,25 @@
 const mongoose = require("mongoose");
 
-const DB_URI = {
-  mongoAtlasUri: `${process.env.MONGO_ATLAS_URI}/email_helper?retryWrites=true&w=majority`, // Live Atlas Cloud URI
-  dockerMongoUri: `${process.env.MONGO_URI}/email_helper`, // Docker container URI
-  mongoDBUri: `mongodb://127.0.0.1:27017/email_helper`, // Local MongoDB URI
-};
-
-let URI;
-
-if (process.env.NODE_ENV == "docker_container") {
-  URI = DB_URI.dockerMongoUri;
-} else if (process.env.NODE_ENV == "production") {
-  URI = DB_URI.mongoAtlasUri;
-} else {
-  URI = DB_URI.mongoDBUri;
+function mongodbURI(DB_Name) {
+  // Check if NODE_ENV or DB_Name is blank
+  if (!process.env.NODE_ENV || !DB_Name) {
+    throw new Error("NODE_ENV or DB_Name should not be blank.");
+  }
+  // Generate MongoDB URI based on the environment
+  if (process.env.NODE_ENV === "production") {
+    // Live Atlas Cloud URI with retryWrites and write concern
+    return `${process.env.MONGO_ATLAS_URI}/${DB_Name}?retryWrites=true&w=majority`;
+  } else {
+    // Default to a local MongoDB URI
+    return `${process.env.MONGO_URI}/${DB_Name}`;
+  }
 }
 
 // connect to mongoDB
 const connectDB = async () => {
   try {
     mongoose.set("strictQuery", false); // Default value is FALSE
-    await mongoose.connect(URI, {
+    await mongoose.connect(mongodbURI("email_helper"), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

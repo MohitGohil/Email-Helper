@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const { createServer } = require("http");
 const helmet = require("helmet");
-const morgan = require("morgan");
+const mongoose = require("mongoose");
 const { errorHandler } = require("./src/middleware");
 const mainRoute = require("./src/routes/mainRoute");
 const { ConnectDB } = require("./config");
@@ -11,9 +11,12 @@ const app = express();
 const server = createServer(app);
 // setting environment variable port
 const PORT = process.env.PORT || 8000;
+// Check production environment
+const isProdEnvironment = process.env.NODE_ENV == "production" ? true : false;
 
 // Logger middleware - server request's logs
-if (process.env.NODE_ENV !== "Production") {
+if (!isProdEnvironment) {
+  const morgan = require("morgan");
   app.use(morgan("dev"));
 }
 
@@ -21,12 +24,11 @@ ConnectDB();
 
 // built-in middleware to handle urlencoded data for form-data : 'content-type: application/x-www-form-urlencoded'
 app.use(express.urlencoded({ extended: false }));
-
 // built-in middleware for json
 app.use(express.json());
-
 // setting various HTTP headers (Better Security)
 app.use(helmet());
+
 // Routes
 app.get("/", (req, res) => res.json({ message: "Hi, Welcome to the mailer service." }));
 app.use("/email", mainRoute);
