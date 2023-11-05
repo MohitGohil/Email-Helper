@@ -3,8 +3,9 @@ const express = require("express");
 const { createServer } = require("http");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const { errorHandler } = require("./src/middleware");
-const mainRoute = require("./src/routes/mainRoute");
+const { authRoute, defaultRoute } = require("./src/routes");
 const { ConnectDB } = require("./config");
 
 const app = express();
@@ -26,12 +27,15 @@ ConnectDB();
 app.use(express.urlencoded({ extended: false }));
 // built-in middleware for json
 app.use(express.json());
+// Parse cookies
+app.use(cookieParser());
 // setting various HTTP headers (Better Security)
 app.use(helmet());
 
 // Routes
 app.get("/", (req, res) => res.json({ message: "Hi, Welcome to the mailer service." }));
-app.use("/email", mainRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/email", defaultRoute);
 
 // Error handler
 app.use(errorHandler);

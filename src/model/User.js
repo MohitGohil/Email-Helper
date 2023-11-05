@@ -7,6 +7,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "please provide a username"],
       trim: true,
+      unique: true, // Ensure email is unique
     },
     password: {
       type: String,
@@ -19,10 +20,8 @@ const userSchema = new Schema(
       type: String,
       required: [true, "please provide a email"],
       trim: true,
-    },
-    refreshToken: {
-      type: String,
-      required: false,
+      unique: true, // Ensure email is unique
+      lowercase: true, // Store email addresses in lowercase for consistency
     },
     activated: { type: Boolean, required: true },
   },
