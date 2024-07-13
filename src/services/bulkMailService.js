@@ -30,7 +30,7 @@ class SendBulkMail {
       const email = this.emails[i];
       if (this.#isValidEmail(email)) {
         const mailOptions = {
-          from: `Test Mail - Nodejs App <${process.env.GMAIL_USERNAME}>`,
+          from: `Test Sender <${process.env.GMAIL_USERNAME}>`,
           to: email,
           cc: this.cc,
           subject: this.subject,
@@ -41,7 +41,8 @@ class SendBulkMail {
           const sentEmail = await transporter.sendMail(mailOptions);
           result.success.push({ email, messageId: sentEmail.messageId });
         } catch (error) {
-          console.error(`Bulk Email Error - ${error}`);
+          let errMessage = { message: `Bulk Email Error - ${error.message}`, stack: error.stack };
+          console.error(errMessage);
           result.error.push({ email, errMessage: error.toString() });
         }
       } else {
