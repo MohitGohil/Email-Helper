@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 function mongodbURI(DB_Name) {
   // Check if NODE_ENV or DB_Name is blank
@@ -41,4 +41,4 @@ mongoose.connection
     console.log("🔴 Mongoose disconnected from DB");
   });
 
-module.exports = connectDB;
+export default connectDB;

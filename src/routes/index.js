@@ -1,4 +1,4 @@
-const authRoute = require("./authRoute");
-const defaultRoute = require("./mainRoute");
+import authRoute from "./authRoute.js";
+import defaultRoute from "./mainRoute.js";
 
-module.exports = { authRoute, defaultRoute };
+export { authRoute, defaultRoute };

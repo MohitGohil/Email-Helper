@@ -1,6 +1,6 @@
-const JWT = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const User = require("../model/User");
+import JWT from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import User from "../model/User.js";
 
 class AuthController {
   // login module
@@ -84,4 +84,4 @@ class AuthController {
   }
 }
 
-module.exports = AuthController;
+export default AuthController;

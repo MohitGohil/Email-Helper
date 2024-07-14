@@ -1,4 +1,5 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 function apiKey(req, res, next) {
   const Key = process.env.API_KEY || "8000";
@@ -12,4 +13,4 @@ function apiKey(req, res, next) {
   }
 }
 
-module.exports = apiKey;
+export default apiKey;

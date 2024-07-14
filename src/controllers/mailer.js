@@ -1,5 +1,5 @@
-// const Mailer = require("../services/mailService");
-const SendBulkMail = require("../services/bulkMailService");
+// import Mailer from "../services/mailService";
+import SendBulkMail from "../services/bulkMailService.js";
 
 async function homeRoute(req, res) {
   return res.status(200).json({
@@ -61,4 +61,4 @@ async function emailHandler(req, res) {
   }
 }
 
-module.exports = { homeRoute, helpRoute, testRoute, emailHandler };
+export { homeRoute, helpRoute, testRoute, emailHandler };

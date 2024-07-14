@@ -1,3 +1,3 @@
-const ConnectDB = require("./dbConnect");
+import ConnectDB from "./dbConnect.js";
 
-module.exports = { ConnectDB };
+export { ConnectDB };

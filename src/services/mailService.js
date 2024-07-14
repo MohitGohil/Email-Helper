@@ -1,6 +1,7 @@
-const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
-require("dotenv").config();
+import nodemailer from "nodemailer";
+import { google } from "googleapis";
+import dotenv from "dotenv";
+dotenv.config();
 
 class Mailer {
   constructor(userInput) {
@@ -71,4 +72,4 @@ class Mailer {
   }
 }
 
-module.exports = Mailer;
+export default Mailer;
