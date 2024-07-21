@@ -1,9 +1,5 @@
-const errorHandler = require("./errorHandler");
-const apiKey = require("./apiKey");
-const checkValidUser = require("./validUser");
+import errorHandler from "./errorHandler.js";
+import apiKey from "./apiKey.js";
+import checkValidUser from "./validUser.js";
 
-module.exports = {
-  errorHandler,
-  apiKey,
-  checkValidUser,
-};
+export { errorHandler, apiKey, checkValidUser };

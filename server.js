@@ -1,23 +1,24 @@
-require("dotenv").config();
-const express = require("express");
-const { createServer } = require("http");
-const helmet = require("helmet");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
-const { errorHandler } = require("./src/middleware");
-const { authRoute, defaultRoute } = require("./src/routes");
-const { ConnectDB } = require("./config");
+import dotenv from "dotenv";
+import express from "express";
+import { createServer } from "http";
+import helmet from "helmet";
+import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
+import { errorHandler } from "./src/middleware/index.js";
+import { authRoute, defaultRoute } from "./src/routes/index.js";
+import { ConnectDB } from "./config/index.js";
 
+dotenv.config();
 const app = express();
 const server = createServer(app);
 // setting environment variable port
 const PORT = process.env.PORT || 8000;
 // Check production environment
-const isProdEnvironment = process.env.NODE_ENV == "production" ? true : false;
+const isProdEnvironment = process.env.NODE_ENV == "production";
 
 // Logger middleware - server request's logs
 if (!isProdEnvironment) {
-  const morgan = require("morgan");
   app.use(morgan("dev"));
 }
 

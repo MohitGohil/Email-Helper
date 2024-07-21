@@ -1,10 +1,12 @@
-const mainRoute = require("express").Router();
-const { checkValidUser } = require("../middleware");
-const { homeRoute, helpRoute, testRoute, emailHandler } = require("../controllers/mailer");
+import { Router } from "express";
+import { checkValidUser } from "../middleware/index.js";
+import { homeRoute, helpRoute, testRoute, emailHandler } from "../controllers/mailer.js";
+
+const mainRoute = Router();
 
 mainRoute.get("/", homeRoute);
 mainRoute.get("/help", helpRoute);
 mainRoute.get("/test", checkValidUser, testRoute);
 mainRoute.post("/", checkValidUser, emailHandler);
 
-module.exports = mainRoute;
+export default mainRoute;

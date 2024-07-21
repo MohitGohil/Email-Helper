@@ -1,44 +1,45 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-function mongodbURI(DB_Name) {
-  // Check if NODE_ENV or DB_Name is blank
-  if (!process.env.NODE_ENV || !DB_Name) {
-    throw new Error("NODE_ENV or DB_Name should not be blank.");
+// Generate MongoDB URI based on the environment
+function getMongoDBUri(dbName) {
+  if (!process.env.NODE_ENV || !dbName) {
+    throw new Error("NODE_ENV or dbName should not be blank.");
   }
-  // Generate MongoDB URI based on the environment
   if (process.env.NODE_ENV === "production") {
     // Live Atlas Cloud URI with retryWrites and write concern
-    return `${process.env.MONGO_ATLAS_URI}/${DB_Name}?retryWrites=true&w=majority`;
+    return `${process.env.MONGO_ATLAS_URI}/${dbName}?retryWrites=true&w=majority`;
   } else {
     // Default to a local MongoDB URI
-    return `${process.env.MONGO_URI}/${DB_Name}`;
+    return `${process.env.MONGO_URI}/${dbName}`;
   }
 }
 
-// connect to mongoDB
+// Connect to MongoDB
 const connectDB = async () => {
   try {
-    mongoose.set("strictQuery", false); // Default value is FALSE
-    await mongoose.connect(mongodbURI("email_helper"), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const dbName = "email_helper";
+    const mongoUri = getMongoDBUri(dbName);
+
+    // Optional: Set Mongoose configuration options
+    mongoose.set("strictQuery", false);
+
+    await mongoose.connect(mongoUri);
   } catch (err) {
-    console.error(err.message);
-    // process.exit(1);
+    console.error(`🔴 Error connecting to MongoDB: ${err.message}`);
+    process.exit(1); // Exit process with failure
   }
 };
 
-// mongoose connection error handler
+// Handle Mongoose connection events
 mongoose.connection
-  .once("open", () => {
-    console.log(`Mongoose connected ✅ DB - ${mongoose.connection.name}`);
+  .on("open", () => {
+    console.log(`Mongoose connection open ✅ DB - ${mongoose.connection.name}`);
   })
   .on("error", (error) => {
-    console.log(`🔴 Error in Mongoose connection DB: ${error}`);
+    console.error(`🔴 Error in Mongoose connection DB: ${error}`);
   })
   .on("disconnected", () => {
     console.log("🔴 Mongoose disconnected from DB");
   });
 
-module.exports = connectDB;
+export default connectDB;

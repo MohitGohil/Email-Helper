@@ -1,5 +1,6 @@
-require("dotenv").config();
-const nodemailer = require("nodemailer");
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+dotenv.config();
 
 // Send emails to multiple users
 class SendBulkMail {
@@ -58,4 +59,4 @@ class SendBulkMail {
   }
 }
 
-module.exports = SendBulkMail;
+export default SendBulkMail;
