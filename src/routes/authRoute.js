@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { apiKey } from "../middleware/index.js";
-import authController from "../controllers/auth.js";
+import AuthController from "../controllers/auth.js";
 
-const authHandler = new authController();
+const authHandler = new AuthController();
 const authRoute = Router();
 
 // default route
