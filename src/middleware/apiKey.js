@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 function apiKey(req, res, next) {
   const Key = process.env.API_KEY || "8000";
   const userApiKey = req.query.api_key;

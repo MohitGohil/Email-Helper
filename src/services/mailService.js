@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
-import dotenv from "dotenv";
-dotenv.config();
 
 class Mailer {
   constructor(userInput) {

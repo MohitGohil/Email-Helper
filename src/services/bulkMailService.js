@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
 import nodemailer from "nodemailer";
-dotenv.config();
 
 // Send emails to multiple users
 class SendBulkMail {
