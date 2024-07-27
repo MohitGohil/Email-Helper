@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import { createServer } from "http";
 import helmet from "helmet";
@@ -9,7 +8,6 @@ import { errorHandler } from "./src/middleware/index.js";
 import { authRoute, defaultRoute } from "./src/routes/index.js";
 import { ConnectDB } from "./config/index.js";
 
-dotenv.config();
 const app = express();
 const server = createServer(app);
 // setting environment variable port
