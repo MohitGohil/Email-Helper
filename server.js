@@ -1,12 +1,13 @@
 import express from "express";
 import { createServer } from "http";
 import helmet from "helmet";
-import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { errorHandler } from "./src/middleware/index.js";
 import { authRoute, defaultRoute } from "./src/routes/index.js";
 import { ConnectDB } from "./config/index.js";
+import gracefulShutdown from "./handler/shutdownHandler.js";
+import configureErrorHandling from "./handler/errorHandling.js";
 
 const app = express();
 const server = createServer(app);
@@ -14,6 +15,8 @@ const server = createServer(app);
 const PORT = process.env.PORT || 8000;
 // Check production environment
 const isProdEnvironment = process.env.NODE_ENV == "production";
+// Graceful shutdown
+const shutdownHandler = gracefulShutdown(server);
 
 // Logger middleware - server request's logs
 if (!isProdEnvironment) {
@@ -51,26 +54,9 @@ server.listen(PORT, () => {
   console.log(message);
 });
 
-// Graceful shutdown
-const gracefulShutdown = () => {
-  console.log("\x1b[1m\x1b[31m", "\n⚡ 🤖 SIGINT Received. Closing server...😴");
-  // Close the server
-  server.close(() => {
-    // Close the Mongoose connection to the database
-    mongoose.connection.close(false, () => {
-      console.log("\x1b[1m\x1b[31m", "⚡ 🤖 SIGINT - Mongoose disconnected from DB...😴");
-    });
-    // Log server closure
-    console.log("\x1b[1m\x1b[31m", "⚡ 🤖 Server is closed...");
-    // Gracefully shutdown the process
-    process.exit(0);
-  });
-  // Handle errors during server closure
-  server.on("error", (error) => {
-    console.log("\x1b[1m\x1b[31m", `⚡ 🤖 Error in closing server: ${error}😴`);
-    process.exit(1); // Forcefully shutdown
-  });
-};
 // Handle SIGINT (Ctrl+C) and SIGTERM (Process Manager) signals
-process.on("SIGINT", gracefulShutdown);
-process.on("SIGTERM", gracefulShutdown);
+process.on("SIGINT", shutdownHandler);
+process.on("SIGTERM", shutdownHandler);
+
+// Set up global error handling for unhandled rejections and exceptions
+configureErrorHandling({ unhandledRejection: false, uncaughtException: false });
